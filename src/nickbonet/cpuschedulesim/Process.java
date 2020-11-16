@@ -1,5 +1,7 @@
 package nickbonet.cpuschedulesim;
 
+import static java.lang.System.*;
+
 public class Process {
     private final int pid;
     private final int arrivalTime;
@@ -9,6 +11,10 @@ public class Process {
         this.pid = pid;
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
+    }
+
+    public void run() {
+        out.println("Current process running: " + this.pid);
     }
 
     public int getPid() {

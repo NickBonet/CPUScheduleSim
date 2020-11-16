@@ -1,5 +1,7 @@
 package nickbonet.cpuschedulesim;
 
+import nickbonet.cpuschedulesim.algorithms.FirstComeFirstServe;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,6 +16,8 @@ public class Main {
         out.println("CPU Scheduling Simulator");
         try {
             readProcessFile(args[0]);
+            FirstComeFirstServe firstComeFirstServe = new FirstComeFirstServe(new ArrayList<>(processList));
+            firstComeFirstServe.runAlgorithm();
         } catch (IOException e) {
             e.printStackTrace();
         }
