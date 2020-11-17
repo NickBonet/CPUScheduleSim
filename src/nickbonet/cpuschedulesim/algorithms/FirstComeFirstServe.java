@@ -15,6 +15,7 @@ public class FirstComeFirstServe extends SchedulingAlgorithm {
         out.println("Now simulating First Come First Serve (FCFS) scheduling.");
     }
 
+    @Override
     public void calculateTimes() {
         for (int i = 0; i < numberOfProcesses; i++) {
             Process process = processList.get(i);
