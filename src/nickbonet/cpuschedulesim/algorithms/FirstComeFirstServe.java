@@ -16,29 +16,39 @@ public class FirstComeFirstServe extends SchedulingAlgorithm {
     }
 
     public void calculateTimes() {
-        for (int i = 0; i < processList.size(); i++) {
+        for (int i = 0; i < numberOfProcesses; i++) {
             Process process = processList.get(i);
-            turnAroundTimes[i] = completedTimes[i] - process.getArrivalTime();
-            waitingTimes[i] = turnAroundTimes[i] - process.getBurstTime();
+            turnAroundTimes.put(process.getPid(), completedTimes.get(process.getPid()) - process.getArrivalTime());
+            waitingTimes.put(process.getPid(), turnAroundTimes.get(process.getPid()) - process.getBurstTime());
         }
+        out.println("Average waiting time: " + computeAverageOf(waitingTimes.values()));
+        out.println("Average turn around time: " + computeAverageOf(turnAroundTimes.values()));
+        out.println("Average response time: " + computeAverageOf(responseTimes.values()));
     }
 
     @Override
-    public void runAlgorithm() {
-        for (int i = 0; i < processList.size(); i++) {
-            currentProcess = processList.get(i);
+    public void algorithmCycle() {
+        for (int i = 0; i < workingProcessList.size(); i++)
+            // Check if any processes are ready to be moved to the ready queue.
+            if (workingProcessList.get(i).getArrivalTime() == time) readyQueue.add(workingProcessList.get(i));
 
-            int runTime = currentProcess.getBurstTime();
-            if (i > 0) completedTimes[i] = runTime + completedTimes[i-1];
-            else completedTimes[0] = runTime;
+        // Run the process.
+        if (currentProcess != null) {
+            currentProcess.run();
+            currentProcess.incrementCyclesRan();
 
-            while (runTime != 0) {
-                currentProcess.run();
-                runTime--;
+            if (currentProcess.getCyclesRan() == currentProcess.getBurstTime()) {
+                workingProcessList.remove(currentProcess);
+                completedTimes.put(currentProcess.getPid(), time);
+                currentProcess = null;
             }
+        } else idle();
+
+        // If there's no running task currently, get the first available process in the ready queue and run it.
+        if (currentProcess == null && !readyQueue.isEmpty()) {
+            currentProcess = readyQueue.get(0);
+            responseTimes.put(currentProcess.getPid(), time - currentProcess.getArrivalTime());
+            readyQueue.remove(currentProcess);
         }
-        calculateTimes();
-        out.println("Average waiting time: " + computeAverageOf(waitingTimes));
-        out.println("Average turn around time: " + computeAverageOf(turnAroundTimes));
     }
 }

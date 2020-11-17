@@ -6,18 +6,19 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.*;
 
 public class Main {
-    private static final ArrayList<Process> processList = new ArrayList<>();
+    private static final List<Process> processList = new ArrayList<>();
 
     public static void main(String[] args) {
         out.println("CPU Scheduling Simulator");
         try {
             readProcessFile(args[0]);
             FirstComeFirstServe firstComeFirstServe = new FirstComeFirstServe(new ArrayList<>(processList));
-            firstComeFirstServe.runAlgorithm();
+            firstComeFirstServe.simulateAlgorithm();
         } catch (IOException e) {
             e.printStackTrace();
         }
