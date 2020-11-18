@@ -6,10 +6,8 @@ import nickbonet.cpuschedulesim.algorithms.ShortestJobFirst;
 import static java.lang.System.*;
 
 public class Main {
-    private static String fileName;
-
     public static void main(String[] args) {
-        fileName = args[0];
+        String fileName = args[0];
         out.println("CPU Scheduling Simulator");
         FirstComeFirstServe firstComeFirstServe = new FirstComeFirstServe(fileName);
         firstComeFirstServe.simulateAlgorithm();

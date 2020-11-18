@@ -3,7 +3,6 @@ package nickbonet.cpuschedulesim.algorithms;
 import nickbonet.cpuschedulesim.Process;
 
 import java.util.Comparator;
-import java.util.List;
 
 import static java.lang.System.*;
 
