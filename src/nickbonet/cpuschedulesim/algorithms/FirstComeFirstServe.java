@@ -11,7 +11,7 @@ public class FirstComeFirstServe extends SchedulingAlgorithm {
 
     public FirstComeFirstServe(List<Process> processList) {
         super(processList);
-        processList.sort(Comparator.comparing(Process::getArrivalTime));
+        workingProcessList.sort(Comparator.comparing(Process::getArrivalTime));
         out.println("Now simulating First Come First Serve (FCFS) scheduling.");
     }
 
