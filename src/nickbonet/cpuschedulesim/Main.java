@@ -1,51 +1,19 @@
 package nickbonet.cpuschedulesim;
 
 import nickbonet.cpuschedulesim.algorithms.FirstComeFirstServe;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import nickbonet.cpuschedulesim.algorithms.ShortestJobFirst;
 
 import static java.lang.System.*;
 
 public class Main {
-    private static final List<Process> processList = new ArrayList<>();
+    private static String fileName;
 
     public static void main(String[] args) {
+        fileName = args[0];
         out.println("CPU Scheduling Simulator");
-        try {
-            readProcessFile(args[0]);
-            FirstComeFirstServe firstComeFirstServe = new FirstComeFirstServe(new ArrayList<>(processList));
-            firstComeFirstServe.simulateAlgorithm();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void readProcessFile(String filename) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            for(String line; (line = br.readLine()) != null; ) {
-                String[] lineParse = line.split(" ");
-
-                if (lineParse.length != 3) {
-                    out.println("Incorrectly formatted process file, exiting.");
-                    exit(1);
-                }
-
-                int[] processAttributes = new int[3];
-                for (int i = 0; i < 3; i++) {
-                    processAttributes[i] = Integer.parseInt(lineParse[i]);
-                }
-
-                Process newProcess = new Process(processAttributes[0], processAttributes[1], processAttributes[2]);
-                processList.add(newProcess);
-
-                String formattedStatus = String.format("New process added! PID: %d / Arrival Time: %d / Burst Time: %d", newProcess.getPid(),
-                        newProcess.getArrivalTime(), newProcess.getBurstTime());
-                out.println(formattedStatus);
-            }
-        }
+        FirstComeFirstServe firstComeFirstServe = new FirstComeFirstServe(fileName);
+        firstComeFirstServe.simulateAlgorithm();
+        ShortestJobFirst sjf = new ShortestJobFirst(fileName);
+        sjf.simulateAlgorithm();
     }
 }

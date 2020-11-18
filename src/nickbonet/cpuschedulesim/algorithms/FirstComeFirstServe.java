@@ -9,8 +9,8 @@ import static java.lang.System.*;
 
 public class FirstComeFirstServe extends SchedulingAlgorithm {
 
-    public FirstComeFirstServe(List<Process> processList) {
-        super(processList);
+    public FirstComeFirstServe(String fileName) {
+        super(fileName);
         workingProcessList.sort(Comparator.comparing(Process::getArrivalTime));
         out.println("Now simulating First Come First Serve (FCFS) scheduling.");
     }

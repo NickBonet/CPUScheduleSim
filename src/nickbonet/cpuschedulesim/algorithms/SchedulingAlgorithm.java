@@ -2,6 +2,9 @@ package nickbonet.cpuschedulesim.algorithms;
 
 import nickbonet.cpuschedulesim.Process;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,9 +13,9 @@ import java.util.List;
 import static java.lang.System.*;
 
 public abstract class SchedulingAlgorithm {
-    protected final List<Process> processList;
-    protected final List<Process> readyQueue;
-    protected final List<Process> workingProcessList;
+    protected final List<Process> processList = new ArrayList<>();
+    protected List<Process> readyQueue;
+    protected List<Process> workingProcessList;
     protected final HashMap<Integer, Integer> waitingTimes = new HashMap<>();
     protected final HashMap<Integer, Integer> responseTimes = new HashMap<>();
     protected final HashMap<Integer, Integer> turnAroundTimes = new HashMap<>();
@@ -21,12 +24,16 @@ public abstract class SchedulingAlgorithm {
     protected int time = 0;
     protected int numberOfProcesses;
 
-    public SchedulingAlgorithm(List<Process> processList) {
-        this.processList = processList;
-        this.workingProcessList = new ArrayList<>();
-        this.workingProcessList.addAll(processList);
-        this.readyQueue = new ArrayList<>();
-        this.numberOfProcesses = processList.size();
+    public SchedulingAlgorithm(String fileName) {
+        try {
+            readProcessFile(fileName);
+            this.workingProcessList = new ArrayList<>();
+            this.workingProcessList.addAll(processList);
+            this.readyQueue = new ArrayList<>();
+            this.numberOfProcesses = processList.size();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void simulateAlgorithm() {
@@ -35,6 +42,31 @@ public abstract class SchedulingAlgorithm {
             time++;
         }
         calculateTimes();
+    }
+
+    protected void readProcessFile(String filename) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            for(String line; (line = br.readLine()) != null; ) {
+                String[] lineParse = line.split(" ");
+
+                if (lineParse.length != 3) {
+                    out.println("Incorrectly formatted process file, exiting.");
+                    exit(1);
+                }
+
+                int[] processAttributes = new int[3];
+                for (int i = 0; i < 3; i++) {
+                    processAttributes[i] = Integer.parseInt(lineParse[i]);
+                }
+
+                Process newProcess = new Process(processAttributes[0], processAttributes[1], processAttributes[2]);
+                processList.add(newProcess);
+
+                String formattedStatus = String.format("New process added! PID: %d / Arrival Time: %d / Burst Time: %d", newProcess.getPid(),
+                        newProcess.getArrivalTime(), newProcess.getBurstTime());
+                out.println(formattedStatus);
+            }
+        }
     }
 
     protected void idle() {
