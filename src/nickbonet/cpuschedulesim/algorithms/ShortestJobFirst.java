@@ -6,12 +6,12 @@ import java.util.Comparator;
 
 import static java.lang.System.*;
 
-public class FirstComeFirstServe extends SchedulingAlgorithm {
+public class ShortestJobFirst extends SchedulingAlgorithm {
 
-    public FirstComeFirstServe(String fileName) {
+    public ShortestJobFirst(String fileName) {
         super(fileName);
         workingProcessList.sort(Comparator.comparing(Process::getArrivalTime));
-        out.println("Now simulating First Come First Serve (FCFS) scheduling.");
+        out.println("Now simulating non-preemptive Shortest Job First (SJF) scheduling.");
     }
 
     @Override
@@ -30,6 +30,9 @@ public class FirstComeFirstServe extends SchedulingAlgorithm {
     public void algorithmCycle() {
         // Check if any processes are ready to be moved to the ready queue.
         for (Process process : workingProcessList) if (process.getArrivalTime() == time) readyQueue.add(process);
+
+        // Sort ready queue by shortest burst time.
+        if (!readyQueue.isEmpty()) readyQueue.sort(Comparator.comparing(Process::getBurstTime));
 
         // If there's a current process, check if it has finished it's execution cycle.
         if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) {
