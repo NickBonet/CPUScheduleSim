@@ -16,18 +16,6 @@ public class FirstComeFirstServe extends SchedulingAlgorithm {
     }
 
     @Override
-    public void calculateTimes() {
-        for (int i = 0; i < numberOfProcesses; i++) {
-            Process process = processList.get(i);
-            turnAroundTimes.put(process.getPid(), completedTimes.get(process.getPid()) - process.getArrivalTime());
-            waitingTimes.put(process.getPid(), turnAroundTimes.get(process.getPid()) - process.getBurstTime());
-        }
-        out.println("Average waiting time: " + computeAverageOf(waitingTimes.values()));
-        out.println("Average turn around time: " + computeAverageOf(turnAroundTimes.values()));
-        out.println("Average response time: " + computeAverageOf(responseTimes.values()));
-    }
-
-    @Override
     public void algorithmCycle() {
         // If there's a current process, check if it has finished it's execution cycle.
         if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) completeProcess();
