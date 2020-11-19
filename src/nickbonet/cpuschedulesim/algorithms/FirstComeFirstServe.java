@@ -1,6 +1,7 @@
 package nickbonet.cpuschedulesim.algorithms;
 
 import nickbonet.cpuschedulesim.Process;
+import nickbonet.cpuschedulesim.algorithms.base.SchedulingAlgorithm;
 
 import java.util.Comparator;
 

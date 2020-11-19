@@ -1,4 +1,4 @@
-package nickbonet.cpuschedulesim.algorithms;
+package nickbonet.cpuschedulesim.algorithms.base;
 
 import nickbonet.cpuschedulesim.Process;
 
