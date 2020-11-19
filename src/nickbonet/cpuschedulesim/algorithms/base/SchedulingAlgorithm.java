@@ -81,6 +81,17 @@ public abstract class SchedulingAlgorithm {
         readyQueue.remove(currentProcess);
     }
 
+    protected void completeProcess() {
+        workingProcessList.remove(currentProcess);
+        completedTimes.put(currentProcess.getPid(), time);
+        currentProcess = null;
+    }
+
+    protected void runProcess() {
+        currentProcess.run();
+        currentProcess.incrementCyclesRan();
+    }
+
     protected double computeAverageOf(Collection<Integer> times) {
         int sum = 0;
         for (int waitingTime : times)

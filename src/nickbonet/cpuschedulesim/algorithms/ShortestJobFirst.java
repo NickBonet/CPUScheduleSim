@@ -33,22 +33,14 @@ public class ShortestJobFirst extends SchedulingAlgorithm {
         if (!readyQueue.isEmpty()) readyQueue.sort(Comparator.comparing(Process::getBurstTime));
 
         // If there's a current process, check if it has finished it's execution cycle.
-        if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) {
-            workingProcessList.remove(currentProcess);
-            completedTimes.put(currentProcess.getPid(), time);
-            currentProcess = null;
-        }
+        if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) completeProcess();
 
         // If there's no running task currently, get the first available process in the ready queue and run it.
-        if (currentProcess == null && !readyQueue.isEmpty()) {
-            getNewProcess();
-        }
+        if (currentProcess == null && !readyQueue.isEmpty()) getNewProcess();
 
         // Run the process.
         // If there is no process currently, idle if the ready queue isn't empty.
-        if (currentProcess != null) {
-            currentProcess.run();
-            currentProcess.incrementCyclesRan();
-        } else if (!readyQueue.isEmpty()) idle();
+        if (currentProcess != null) runProcess();
+        else if (!readyQueue.isEmpty()) idle();
     }
 }
