@@ -4,15 +4,21 @@ import nickbonet.cpuschedulesim.Process;
 import nickbonet.cpuschedulesim.algorithms.base.SchedulingAlgorithm;
 
 import java.util.Comparator;
+import java.util.Scanner;
 
-import static java.lang.System.*;
+import static java.lang.System.out;
 
-public class ShortestJobFirst extends SchedulingAlgorithm {
+public class RoundRobin extends SchedulingAlgorithm {
+    private int quantumCycle;
+    private int currentQuantumIndex;
 
-    public ShortestJobFirst(String fileName) {
+    public RoundRobin(String fileName) {
         super(fileName);
         workingProcessList.sort(Comparator.comparing(Process::getArrivalTime));
-        out.println("Now simulating non-preemptive Shortest Job First (SJF) scheduling.");
+        out.println("Now simulating Round Robin scheduling.");
+        Scanner timeQuantum = new Scanner(System.in);
+        out.println("Enter time quantum value: ");
+        quantumCycle = timeQuantum.nextInt();
     }
 
     @Override
@@ -29,14 +35,22 @@ public class ShortestJobFirst extends SchedulingAlgorithm {
 
     @Override
     public void algorithmCycle() {
-        // Sort ready queue by shortest burst time.
-        if (!readyQueue.isEmpty()) readyQueue.sort(Comparator.comparing(Process::getBurstTime));
-
         // If there's a current process, check if it has finished it's execution cycle.
         if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) {
             workingProcessList.remove(currentProcess);
             completedTimes.put(currentProcess.getPid(), time);
             currentProcess = null;
+            currentQuantumIndex = 0;
+        }
+
+        // If the limit of the quantum cycle was met, check the ready queue and assign
+        // the next available process for execution.
+        if (currentQuantumIndex == quantumCycle) {
+            if (!readyQueue.isEmpty() && currentProcess != null) {
+                readyQueue.add(currentProcess);
+                getNewProcess();
+            }
+            currentQuantumIndex -= quantumCycle;
         }
 
         // If there's no running task currently, get the first available process in the ready queue and run it.
@@ -49,6 +63,7 @@ public class ShortestJobFirst extends SchedulingAlgorithm {
         if (currentProcess != null) {
             currentProcess.run();
             currentProcess.incrementCyclesRan();
+            currentQuantumIndex++;
         } else if (!readyQueue.isEmpty()) idle();
     }
 }

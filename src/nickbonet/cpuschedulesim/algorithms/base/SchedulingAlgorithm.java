@@ -38,6 +38,8 @@ public abstract class SchedulingAlgorithm {
 
     public void simulateAlgorithm() {
         while(!workingProcessList.isEmpty()) {
+            // Check if any processes are ready to be moved to the ready queue.
+            for (Process process : workingProcessList) if (process.getArrivalTime() == time) readyQueue.add(process);
             algorithmCycle();
             time++;
         }
@@ -71,6 +73,12 @@ public abstract class SchedulingAlgorithm {
 
     protected void idle() {
         out.println("Idling.");
+    }
+
+    protected void getNewProcess() {
+        currentProcess = readyQueue.get(0);
+        responseTimes.put(currentProcess.getPid(), time - currentProcess.getArrivalTime());
+        readyQueue.remove(currentProcess);
     }
 
     protected double computeAverageOf(Collection<Integer> times) {
