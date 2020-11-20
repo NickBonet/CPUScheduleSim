@@ -28,6 +28,10 @@ public class RoundRobin extends SchedulingAlgorithm {
             currentQuantumIndex = 0;
         }
 
+        // Sort the readyQueue by the number of times a process has been passed to the CPU for execution.
+        // Allows for looping through the list in Round Robin order.
+        if (!readyQueue.isEmpty()) readyQueue.sort(Comparator.comparing(Process::getTimesExecuted));
+
         // If the limit of the quantum cycle was met, check the ready queue and assign
         // the next available process for execution.
         if (currentQuantumIndex == quantumCycle) {

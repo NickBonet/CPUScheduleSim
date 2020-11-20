@@ -7,6 +7,7 @@ public class Process {
     private final int arrivalTime;
     private final int burstTime;
     private int cyclesRan = 0;
+    private int timesExecuted = 0;
 
     public Process(int pid, int arrivalTime, int burstTime) {
         this.pid = pid;
@@ -36,5 +37,13 @@ public class Process {
 
     public int getCyclesRan() {
         return cyclesRan;
+    }
+
+    public void incrementTimesExecuted() {
+        timesExecuted++;
+    }
+
+    public int getTimesExecuted() {
+        return timesExecuted;
     }
 }

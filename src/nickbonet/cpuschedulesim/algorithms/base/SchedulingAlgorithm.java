@@ -1,6 +1,7 @@
 package nickbonet.cpuschedulesim.algorithms.base;
 
 import nickbonet.cpuschedulesim.Process;
+import nickbonet.cpuschedulesim.algorithms.RoundRobin;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -110,6 +111,7 @@ public abstract class SchedulingAlgorithm {
         readyQueue.remove(currentProcess);
         out.println("Process " + currentProcess.getPid() + " started at " + time + " milliseconds.");
         out.println(SECTION_BREAK);
+        if (this instanceof RoundRobin) currentProcess.incrementTimesExecuted();
     }
 
     protected void completeProcess() {
