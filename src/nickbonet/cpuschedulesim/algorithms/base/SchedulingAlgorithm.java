@@ -14,7 +14,7 @@ import static java.lang.System.exit;
 import static java.lang.System.out;
 
 public abstract class SchedulingAlgorithm {
-    private static final String sectionBreak = "--------------------------------------------------------------------------------------";
+    private static final String SECTION_BREAK = "--------------------------------------------------------------------------------------";
     protected final List<Process> processList = new ArrayList<>();
     protected final HashMap<Integer, Integer> waitingTimes = new HashMap<>();
     protected final HashMap<Integer, Integer> responseTimes = new HashMap<>();
@@ -85,7 +85,7 @@ public abstract class SchedulingAlgorithm {
         out.println("Average waiting time: " + computeAverageOf(waitingTimes.values()));
         out.println("Average turn around time: " + computeAverageOf(turnAroundTimes.values()));
         out.println("Average response time: " + computeAverageOf(responseTimes.values()));
-        out.println(sectionBreak);
+        out.println(SECTION_BREAK);
     }
 
     private double computeAverageOf(Collection<Integer> times) {
@@ -104,13 +104,13 @@ public abstract class SchedulingAlgorithm {
         responseTimes.put(currentProcess.getPid(), time - currentProcess.getArrivalTime());
         readyQueue.remove(currentProcess);
         out.println("Process " + currentProcess.getPid() + " started at " + time + " milliseconds.");
-        out.println(sectionBreak);
+        out.println(SECTION_BREAK);
     }
 
     protected void completeProcess() {
         workingProcessList.remove(currentProcess);
         out.println("Process " + currentProcess.getPid() + " completed at " + time + " milliseconds.");
-        out.println(sectionBreak);
+        out.println(SECTION_BREAK);
         completedTimes.put(currentProcess.getPid(), time);
         currentProcess = null;
     }
