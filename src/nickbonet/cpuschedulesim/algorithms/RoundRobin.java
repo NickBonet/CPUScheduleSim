@@ -9,20 +9,19 @@ import java.util.Scanner;
 import static java.lang.System.out;
 
 public class RoundRobin extends SchedulingAlgorithm {
-    private int quantumCycle;
+    private final int quantumCycle;
     private int currentQuantumIndex;
 
     public RoundRobin(String fileName) {
         super(fileName);
         workingProcessList.sort(Comparator.comparing(Process::getArrivalTime));
-        out.println("Now simulating Round Robin scheduling.");
         Scanner timeQuantum = new Scanner(System.in);
         out.println("Enter time quantum value: ");
         quantumCycle = timeQuantum.nextInt();
     }
 
     @Override
-    public void algorithmCycle() {
+    protected void algorithmCycle() {
         // If there's a current process, check if it has finished it's execution cycle.
         if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) {
             completeProcess();

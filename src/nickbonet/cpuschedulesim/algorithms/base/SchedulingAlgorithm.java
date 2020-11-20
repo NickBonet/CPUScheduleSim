@@ -10,21 +10,24 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.lang.System.*;
+import static java.lang.System.exit;
+import static java.lang.System.out;
 
 public abstract class SchedulingAlgorithm {
+    private static final String sectionBreak = "--------------------------------------------------------------------------------------";
     protected final List<Process> processList = new ArrayList<>();
-    protected List<Process> readyQueue;
-    protected List<Process> workingProcessList;
     protected final HashMap<Integer, Integer> waitingTimes = new HashMap<>();
     protected final HashMap<Integer, Integer> responseTimes = new HashMap<>();
     protected final HashMap<Integer, Integer> turnAroundTimes = new HashMap<>();
     protected final HashMap<Integer, Integer> completedTimes = new HashMap<>();
+    protected List<Process> readyQueue;
+    protected List<Process> workingProcessList;
     protected Process currentProcess;
     protected int time = 0;
     protected int numberOfProcesses;
 
     public SchedulingAlgorithm(String fileName) {
+        out.println("Now simulating " + this.getClass().getSimpleName() + " scheduling.");
         try {
             readProcessFile(fileName);
             this.workingProcessList = new ArrayList<>();
@@ -36,22 +39,12 @@ public abstract class SchedulingAlgorithm {
         }
     }
 
-    public void simulateAlgorithm() {
-        while(!workingProcessList.isEmpty()) {
-            // Check if any processes are ready to be moved to the ready queue.
-            for (Process process : workingProcessList) if (process.getArrivalTime() == time) readyQueue.add(process);
-            algorithmCycle();
-            time++;
-        }
-        calculateTimes();
-    }
-
     protected void readProcessFile(String filename) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            for(String line; (line = br.readLine()) != null; ) {
+            for (String line; (line = br.readLine()) != null; ) {
                 String[] lineParse = line.split(" ");
 
-                if (lineParse.length != 3) {
+                if (lineParse.length < 3) {
                     out.println("Incorrectly formatted process file, exiting.");
                     exit(1);
                 }
@@ -71,9 +64,17 @@ public abstract class SchedulingAlgorithm {
         }
     }
 
-    protected void idle() {
-        out.println("Idling.");
+    public void simulateAlgorithm() {
+        while (!workingProcessList.isEmpty()) {
+            // Check if any processes are ready to be moved to the ready queue.
+            for (Process process : workingProcessList) if (process.getArrivalTime() == time) readyQueue.add(process);
+            algorithmCycle();
+            time++;
+        }
+        calculateTimes();
     }
+
+    protected abstract void algorithmCycle();
 
     protected void calculateTimes() {
         for (int i = 0; i < numberOfProcesses; i++) {
@@ -84,16 +85,32 @@ public abstract class SchedulingAlgorithm {
         out.println("Average waiting time: " + computeAverageOf(waitingTimes.values()));
         out.println("Average turn around time: " + computeAverageOf(turnAroundTimes.values()));
         out.println("Average response time: " + computeAverageOf(responseTimes.values()));
+        out.println(sectionBreak);
+    }
+
+    private double computeAverageOf(Collection<Integer> times) {
+        int sum = 0;
+        for (int waitingTime : times)
+            sum += waitingTime;
+        return ((double) sum / (double) times.size());
+    }
+
+    protected void idle() {
+        out.println("Idling.");
     }
 
     protected void getNewProcess() {
         currentProcess = readyQueue.get(0);
         responseTimes.put(currentProcess.getPid(), time - currentProcess.getArrivalTime());
         readyQueue.remove(currentProcess);
+        out.println("Process " + currentProcess.getPid() + " started at " + time + " milliseconds.");
+        out.println(sectionBreak);
     }
 
     protected void completeProcess() {
         workingProcessList.remove(currentProcess);
+        out.println("Process " + currentProcess.getPid() + " completed at " + time + " milliseconds.");
+        out.println(sectionBreak);
         completedTimes.put(currentProcess.getPid(), time);
         currentProcess = null;
     }
@@ -102,13 +119,4 @@ public abstract class SchedulingAlgorithm {
         currentProcess.run();
         currentProcess.incrementCyclesRan();
     }
-
-    protected double computeAverageOf(Collection<Integer> times) {
-        int sum = 0;
-        for (int waitingTime : times)
-            sum += waitingTime;
-        return ((double) sum / (double) times.size());
-    }
-
-    public abstract void algorithmCycle();
 }

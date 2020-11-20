@@ -5,18 +5,15 @@ import nickbonet.cpuschedulesim.algorithms.base.SchedulingAlgorithm;
 
 import java.util.Comparator;
 
-import static java.lang.System.*;
+public class NonPreemptiveShortestJobFirst extends SchedulingAlgorithm {
 
-public class ShortestJobFirst extends SchedulingAlgorithm {
-
-    public ShortestJobFirst(String fileName) {
+    public NonPreemptiveShortestJobFirst(String fileName) {
         super(fileName);
         workingProcessList.sort(Comparator.comparing(Process::getArrivalTime));
-        out.println("Now simulating non-preemptive Shortest Job First (SJF) scheduling.");
     }
 
     @Override
-    public void algorithmCycle() {
+    protected void algorithmCycle() {
         // Sort ready queue by shortest burst time.
         if (!readyQueue.isEmpty()) readyQueue.sort(Comparator.comparing(Process::getBurstTime));
 

@@ -5,18 +5,15 @@ import nickbonet.cpuschedulesim.algorithms.base.SchedulingAlgorithm;
 
 import java.util.Comparator;
 
-import static java.lang.System.*;
-
 public class FirstComeFirstServe extends SchedulingAlgorithm {
 
     public FirstComeFirstServe(String fileName) {
         super(fileName);
         workingProcessList.sort(Comparator.comparing(Process::getArrivalTime));
-        out.println("Now simulating First Come First Serve (FCFS) scheduling.");
     }
 
     @Override
-    public void algorithmCycle() {
+    protected void algorithmCycle() {
         // If there's a current process, check if it has finished it's execution cycle.
         if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) completeProcess();
 
