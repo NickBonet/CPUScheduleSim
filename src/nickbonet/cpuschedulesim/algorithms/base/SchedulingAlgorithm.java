@@ -107,7 +107,8 @@ public abstract class SchedulingAlgorithm {
 
     protected void getNewProcess() {
         currentProcess = readyQueue.get(0);
-        if (!responseTimes.containsKey(currentProcess.getPid())) responseTimes.put(currentProcess.getPid(), time - currentProcess.getArrivalTime());
+        if (!responseTimes.containsKey(currentProcess.getPid()))
+            responseTimes.put(currentProcess.getPid(), time - currentProcess.getArrivalTime());
         readyQueue.remove(currentProcess);
         out.println(SECTION_BREAK);
         out.println("Process " + currentProcess.getPid() + " started at " + time + " milliseconds.");
