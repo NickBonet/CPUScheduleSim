@@ -88,9 +88,9 @@ public abstract class SchedulingAlgorithm {
             turnAroundTimes.put(process.getPid(), completedTimes.get(process.getPid()) - process.getArrivalTime());
             waitingTimes.put(process.getPid(), turnAroundTimes.get(process.getPid()) - process.getBurstTime());
         }
-        out.println("Average waiting time: " + computeAverageOf(waitingTimes.values()));
-        out.println("Average turn around time: " + computeAverageOf(turnAroundTimes.values()));
-        out.println("Average response time: " + computeAverageOf(responseTimes.values()));
+        out.println(this.getClass().getSimpleName() + " average waiting time: " + computeAverageOf(waitingTimes.values()));
+        out.println(this.getClass().getSimpleName() + " average turn around time: " + computeAverageOf(turnAroundTimes.values()));
+        out.println(this.getClass().getSimpleName() + " average response time: " + computeAverageOf(responseTimes.values()));
         out.println(SECTION_BREAK);
     }
 
