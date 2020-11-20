@@ -17,7 +17,7 @@ public class NonPreemptiveShortestJobFirst extends SchedulingAlgorithm {
         // Sort ready queue by shortest burst time.
         if (!readyQueue.isEmpty()) readyQueue.sort(Comparator.comparing(Process::getBurstTime));
 
-        // If there's a current process, check if it has finished it's execution cycle.
+        // If there's a current process, check if it has finished its execution cycle.
         if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) completeProcess();
 
         // If there's no running task currently, get the first available process in the ready queue and run it.

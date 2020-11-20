@@ -14,7 +14,7 @@ public class FirstComeFirstServe extends SchedulingAlgorithm {
 
     @Override
     protected void algorithmCycle() {
-        // If there's a current process, check if it has finished it's execution cycle.
+        // If there's a current process, check if it has finished its execution cycle.
         if (currentProcess != null && currentProcess.getCyclesRan() == currentProcess.getBurstTime()) completeProcess();
 
         // If there's no running task currently, get the first available process in the ready queue and run it.
