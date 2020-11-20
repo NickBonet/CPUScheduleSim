@@ -8,7 +8,7 @@ import static java.lang.System.out;
 
 public class Main {
     public static void main(String[] args) {
-        String fileName = args[0];
+        String fileName = "processes.txt";
         out.println("CPU Scheduling Simulator");
         FirstComeFirstServe firstComeFirstServe = new FirstComeFirstServe(fileName);
         firstComeFirstServe.simulateAlgorithm();
