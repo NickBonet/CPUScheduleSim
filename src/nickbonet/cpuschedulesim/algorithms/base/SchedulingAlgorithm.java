@@ -13,6 +13,11 @@ import java.util.List;
 import static java.lang.System.exit;
 import static java.lang.System.out;
 
+/**
+ * Serves as the base for all of the algorithm classes.
+ *
+ * @author Nicholas Bonet
+ */
 public abstract class SchedulingAlgorithm {
     private static final String SECTION_BREAK = "--------------------------------------------------------------------------------------";
     protected final List<Process> processList = new ArrayList<>();
